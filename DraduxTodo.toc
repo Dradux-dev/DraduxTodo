@@ -1,0 +1,47 @@
+## Interface: 80000
+## Title: Dradux ToDo
+## Author: Dradux
+## Version: 0.1
+## Notes: Tool to setup and manage your tasks within Azeroth.
+## OptionalDeps: ElvUI, LibStub, LibUIDropDownMenu, Ace3
+## SavedVariables: DraduxTodoDB
+
+#@no-lib-strip@
+libs\load_libs.xml
+#@end-no-lib-strip@
+
+Core.lua
+Skin.lua
+GUI\MainFrame.lua
+GUI\DynamicContextMenu.lua
+DraduxTodo.lua
+modules\data\data.lua
+modules\data\character\character.lua
+modules\data\character\manager.lua
+modules\data\character\base.lua
+modules\data\character\custom\custom.lua
+modules\data\character\custom\manager.lua
+modules\data\character\neck.lua
+modules\data\character\essences\essence.lua
+modules\data\character\essences\bodyguard-nazjatar.lua
+modules\data\character\essences\eternal-palace.lua
+modules\data\character\essences\island-expeditions.lua
+modules\data\character\essences\mythic-plus.lua
+modules\data\character\essences\neck-level.lua
+modules\data\character\essences\operation-mechagon.lua
+modules\data\character\essences\pvp.lua
+modules\data\character\essences\pvp-nazjatar-mechagon.lua
+modules\data\character\essences\rated-pvp.lua
+modules\data\character\essences\reputation-mechagon.lua
+modules\data\character\essences\reputation-nazjatar.lua
+modules\data\task\task.lua
+modules\data\task\manager.lua
+modules\data\task\worldquest\worldboss\nazjatar.lua
+modules\util\util.lua
+modules\util\condition.lua
+modules\util\datetime.lua
+modules\util\dictionary.lua
+modules\util\list.lua
+modules\util\log.lua
+
+
