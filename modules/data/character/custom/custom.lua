@@ -32,7 +32,7 @@ types:
 ]]
 
 
-function Custom:OnEnable()
+function Custom:Initialize()
     self.name = ""
     self.type = "none"
     self.value = ""
@@ -96,5 +96,11 @@ function Custom:AsData()
             type = self.type,
             value = self.value
         }
+    end
+end
+
+function Custom:OnModuleCreated(module)
+    if module["Initialize"] then
+        module:Initialize()
     end
 end

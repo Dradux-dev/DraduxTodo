@@ -1,6 +1,6 @@
 local Log = DraduxTodo:GetModule("Util"):NewModule("Log")
 
-function Log:OnEnable()
+function Log:OnInitialize()
     self.print = false
     self.virag = true
 end

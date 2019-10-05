@@ -1,7 +1,7 @@
 local Pvp = DraduxTodo:GetModule("Data"):GetModule("Essence"):NewModule("Pvp", DraduxTodo:GetModule("Data"):GetModule("Essence"), "AceEvent-3.0")
 
-function Pvp:OnEnable()
-    self:Super():OnEnable()
+function Pvp:Initialize()
+    self:Super():Initialize()
 
     self.type = "Pvp"
     self.horde = {
@@ -20,7 +20,7 @@ function Pvp:OnEnable()
     self.progress = {}
 end
 
-function Pvp:UpdateProgres()
+function Pvp:UpdateProgress()
     local faction = self:GetFactionData()
 
     if self.rank == 0 then

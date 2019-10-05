@@ -1,9 +1,5 @@
 local Manager = DraduxTodo:GetModule("Data"):NewModule("CustomManager", "AceEvent-3.0")
 
-function Manager:OnEnable()
-
-end
-
 function Manager:AddCustom(data)
     local module = self:NewModule(data.name, DraduxTodo:GetModule("Data"):GetModule("Custom"), "AceEvent-3.0")
     module:FromData(data)
@@ -30,4 +26,10 @@ function Manager:AsData()
     end
 
     return t
+end
+
+function Manager:OnModuleCreate(module)
+    if module["Initialize"] then
+        module:Initialize()
+    end
 end

@@ -24,7 +24,7 @@ local Essence = DraduxTodo:GetModule("Data"):NewModule("Essence", "AceEvent-3.0"
 32 Conflict and Strife
 ]]
 
-function Essence:OnEnable()
+function Essence:Initialize()
     self.rank = 1
     self.discounted = false
     self.progress = {}
@@ -130,10 +130,25 @@ function Essence:GetQuest(questID)
             return
         end
 
+        local type = select(2, ...)
+        local completed = select(3, ...)
         local actual = select(4, ...)
         local max = select(5, ...)
 
+        -- Fix stuff
         text = text:gsub("[0-9]*/[0-9]* (.*)", "%1")
+
+        if type == "object" and not completed and actual == max then
+            -- Required for "Storming the Battlefields" quest objective #1 "Win a PVP Island Expedition"
+            -- 1: Win a PVP Island Expedition
+            -- 2: object
+            -- 3: false
+            -- 4: 1
+            -- 5: 1
+            -- if Win a PVP Island Expedition is still open
+            actual = 0
+        end
+
         return text, actual, max
     end
 
@@ -220,6 +235,21 @@ function Essence:AsData()
         discounted = self.discounted,
         progress = self.progress
     }
+end
+
+function Essence:FromData(data)
+    self.rank = data.rank
+    self.discounted = data.discounted
+
+    self.progress = {}
+    for _, entry in pairs(data.progress) do
+        local t = {}
+        for k, v in pairs(entry) do
+            t[k] = v
+        end
+
+        table.insert(self.progress, t)
+    end
 end
 
 function Essence:Super()

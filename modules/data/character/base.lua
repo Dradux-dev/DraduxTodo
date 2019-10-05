@@ -1,6 +1,6 @@
 local Base = DraduxTodo:GetModule("Data"):NewModule("Base", "AceEvent-3.0")
 
-function Base:OnEnable()
+function Base:Initialize()
     self.level = 1
     self.cname = "Dummy"
     self.realm = "Tarren Mill"
@@ -57,6 +57,7 @@ function Base:IsActivePlayer()
 end
 
 function Base:FromData(data)
+    self:Log():Write(self, "FromData", data, "Data")
     self.level = data.level
     self.cname = data.name
     self.realm = data.realm

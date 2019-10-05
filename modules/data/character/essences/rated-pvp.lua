@@ -1,7 +1,7 @@
 local RatedPvp = DraduxTodo:GetModule("Data"):GetModule("Essence"):NewModule("RatedPvp", DraduxTodo:GetModule("Data"):GetModule("Essence"), "AceEvent-3.0")
 
-function RatedPvp:OnEnable()
-    self:Super():OnEnable()
+function RatedPvp:Initialize()
+    self:Super():Initialize()
 
     self.type = "RatedPvp"
     self.essenceID = 32

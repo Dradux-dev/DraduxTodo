@@ -39,7 +39,7 @@ function DraduxTodo:GetDB()
         DraduxTodo.db = LibStub("AceDB-3.0"):New("DraduxTodoDB", defaultSavedVars)
     end
 
-    return DraduxTodo.db
+    return DraduxTodo.db.profile
 end
 
 function DraduxTodo:ReleaseContent()

@@ -1,9 +1,5 @@
 local Condition = DraduxTodo:GetModule("Util"):NewModule("Condition", "AceEvent-3.0")
 
-function Condition:OnEnable()
-
-end
-
 function Condition:Evaluate(solver, data)
     data = data or { type = "true" }
 

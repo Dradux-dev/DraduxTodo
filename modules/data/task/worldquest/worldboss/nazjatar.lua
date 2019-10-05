@@ -1,7 +1,7 @@
 local NazjatarWorldboss = DraduxTodo:GetModule("Data"):GetModule("TaskManager"):NewTemplate("Worldquest_Worldboss_Nazjatar", "AceEvent-3.0")
 
-function NazjatarWorldboss:OnEnable()
-    self:Super():OnEnable()
+function NazjatarWorldboss:Initialize()
+    self:Super():Initialize()
 
     self.category = {"Worldquest", "Worldboss", "Nazjatar"}
     self:RegisterEvent("QUEST_TURNED_IN", "Progress")

@@ -29,7 +29,7 @@ local db = {
 }
 ]]
 
-function Task:OnEnable()
+function Task:Initialize()
     local DateTime = DraduxTodo:GetModule("Util"):GetModule("DateTime")
     local now = DateTime:Now()
 

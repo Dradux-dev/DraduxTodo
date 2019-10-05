@@ -1,7 +1,7 @@
 local MythicPlus = DraduxTodo:GetModule("Data"):GetModule("Essence"):NewModule("MythicPlus", DraduxTodo:GetModule("Data"):GetModule("Essence"), "AceEvent-3.0")
 
-function MythicPlus:OnEnable()
-    self:Super():OnEnable()
+function MythicPlus:Initialize()
+    self:Super():Initialize()
 
     self.type = "MythicPlus"
     self.itemID = 169491

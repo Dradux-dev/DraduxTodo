@@ -1,7 +1,7 @@
 local ReputationNazjatar = DraduxTodo:GetModule("Data"):GetModule("Essence"):NewModule("ReputationNazjatar", DraduxTodo:GetModule("Data"):GetModule("Essence"), "AceEvent-3.0")
 
-function ReputationNazjatar:OnEnable()
-    self:Super():OnEnable()
+function ReputationNazjatar:Initialize()
+    self:Super():Initialize()
 
     self.type = "ReputationNazjatar"
     self.currencyID = 1721

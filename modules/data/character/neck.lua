@@ -4,7 +4,7 @@ local function GetEssenceModule(self, name, baseName)
     return self:NewModule(name, DraduxTodo:GetModule("Data"):GetModule("Essence"):GetModule(baseName), "AceEvent-3.0")
 end
 
-function Neck:OnEnable()
+function Neck:Initialize()
     self.level = 1
 
     -- Reputation Nazjatar
@@ -20,7 +20,7 @@ function Neck:OnEnable()
     -- Pvp
     self.sphereOfSuppression = GetEssenceModule(self, "SphereOfSuppression", "Pvp"):SphereOfSuppression()
     self.bloodOfTheEnemy = GetEssenceModule(self, "BloodOfTheEnemy", "Pvp"):BloodOfTheEnemy()
-    self.artificeTime = GetEssenceModule(self, "ArtificeTime", "Pvp"):ArtificeTime()
+    self.artificeOfTime = GetEssenceModule(self, "ArtificeOfTime", "Pvp"):ArtificeOfTime()
 
     self.conflictAndStrife = GetEssenceModule(self, "ConflictAndStrife", "RatedPvp")
 end
@@ -60,7 +60,13 @@ function Neck:Scan()
 end
 
 function Neck:FromData(data)
-    self.level = data.level
+    for k, v in ipairs(data) do
+        if self.modules[k] then
+            self.modules[k]:FromData(v)
+        else
+            self.level = data.level
+        end
+    end
 end
 
 function Neck:AsData()
@@ -74,4 +80,10 @@ function Neck:AsData()
     end
 
     return t
+end
+
+function Neck:OnModuleCreated(module)
+    if module["Initialize"] then
+        module:Initialize()
+    end
 end
