@@ -64,10 +64,6 @@ function Base:FromData(data)
     self.faction = data.faction
     self.class = data.class
     self.guid = data.guid
-
-    if self:IsActivePlayer() then
-        self:RegisterEvent("PLAYER_LEVEL_UP")
-    end
 end
 
 function Base:AsData()
@@ -79,10 +75,6 @@ function Base:AsData()
         class = self.class,
         guid = self.guid
     }
-end
-
-function Base:PLAYER_LEVEL_UP()
-    self.level = UnitLevel("player")
 end
 
 function Base:Log()

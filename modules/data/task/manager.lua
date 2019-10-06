@@ -8,8 +8,46 @@ function TaskManager:NewTemplate(name, libs)
     return module
 end
 
-function TaskManager:OnModuleCreated(module)
-    if module["Initialize"] then
-        module:Initialize()
+function TaskManager:OnInitialize()
+    for _, module in pairs(Templates.modules) do
+        if module["Initialize"] then
+            module:Initialize()
+        end
     end
+end
+
+function TaskManager:GetCategories()
+    local List = DraduxTodo:GetModule("Util"):GetModule("List")
+
+    local function AddCategory(t, category)
+        local front = List:PopFront(category)
+
+        if not t[front] then
+            if table.getn(category) == 0 then
+                t[front] = true
+            else
+                t[front] = {}
+                AddCategory(t[front], category)
+            end
+        else
+            if type(t[front]) == "boolean" and table.getn(category) >= 1 then
+                t[front] = {}
+            end
+
+            AddCategory(t[front], category)
+        end
+    end
+
+    local t = {}
+    for name, module in pairs(Templates.modules) do
+        if module.category then
+            AddCategory(t, List:Copy(module.category))
+        end
+    end
+
+    return t
+end
+
+function TaskManager:Log()
+    return DraduxTodo:GetModule("Util"):GetModule("Log")
 end

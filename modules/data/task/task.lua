@@ -30,6 +30,7 @@ local db = {
 ]]
 
 function Task:Initialize()
+    self:Log():Write(self, "Initialize", "called")
     local DateTime = DraduxTodo:GetModule("Util"):GetModule("DateTime")
     local now = DateTime:Now()
 
@@ -75,8 +76,6 @@ function Task:Initialize()
             gui = nil,
         }
     }
-
-    self.reset.next = Task:NextReset()
 end
 
 function Task:AsData()
@@ -229,4 +228,8 @@ function Task:SetProgress(character, key, actual, max)
         max = max
     }
     self.progress[guid] = t
+end
+
+function Task:Log()
+    return DraduxTodo:GetModule("Util"):GetModule("Log")
 end

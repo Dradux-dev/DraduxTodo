@@ -12,3 +12,13 @@ function List:PopBack(l)
     table.remove(l, n)
     return back
 end
+
+function List:Copy(l)
+    local new = {}
+
+    for _, element in ipairs(l) do
+        table.insert(new, element)
+    end
+
+    return new
+end

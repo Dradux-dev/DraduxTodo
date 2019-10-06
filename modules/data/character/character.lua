@@ -50,9 +50,19 @@ function Character:IsActive()
     return self.base:IsActivePlayer()
 end
 
+function Character:RegisterEvents()
+    if self:IsActive() then
+        self:RegisterEvent("PLAYER_LEVEL_UP")
+        self:RegisterEvent("AZERITE_ITEM_POWER_LEVEL_CHANGED")
+        self:RegisterEvent("AZERITE_ESSENCE_CHANGED")
+    end
+end
+
 function Character:Scan()
     self.base:Scan()
     self.neck:Scan()
+
+    self:RegisterEvents()
 end
 
 function Character:AsData()
@@ -75,6 +85,8 @@ function Character:FromData(data)
             self[k]:FromData(v)
         end
     end
+
+    self:RegisterEvents()
 end
 
 function Character:Log()
@@ -85,4 +97,19 @@ function Character:OnModuleCreated(module)
     if module["Initialize"] then
         module:Initialize()
     end
+end
+
+function Character:PLAYER_LEVEL_UP()
+    -- Character gained new level
+    self.base:Scan()
+end
+
+function Character:AZERITE_ITEM_POWER_LEVEL_CHANGED()
+    -- Heart of Azeroth level gained
+    self.neck:Scan()
+end
+
+function Character:AZERITE_ESSENCE_CHANGED()
+    -- Learned new Essence for the Heart of Azeroth
+    self.neck:Scan()
 end

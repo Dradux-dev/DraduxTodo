@@ -15,6 +15,12 @@ Skin.lua
 GUI\MainFrame.lua
 GUI\DynamicContextMenu.lua
 DraduxTodo.lua
+modules\util\util.lua
+modules\util\condition.lua
+modules\util\datetime.lua
+modules\util\dictionary.lua
+modules\util\list.lua
+modules\util\log.lua
 modules\data\data.lua
 modules\data\character\character.lua
 modules\data\character\manager.lua
@@ -37,11 +43,5 @@ modules\data\character\essences\reputation-nazjatar.lua
 modules\data\task\task.lua
 modules\data\task\manager.lua
 modules\data\task\worldquest\worldboss\nazjatar.lua
-modules\util\util.lua
-modules\util\condition.lua
-modules\util\datetime.lua
-modules\util\dictionary.lua
-modules\util\list.lua
-modules\util\log.lua
 
 
