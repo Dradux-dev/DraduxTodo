@@ -37,13 +37,17 @@ function CharacterManager:UpdateGuidKey()
     end
 end
 
+function CharacterManager:Scan()
+    for _, character in ipairs(self.characters or {}) do
+        if character:IsActive() then
+            character:Scan()
+        end
+    end
+end
+
 function CharacterManager:PLAYER_ENTERING_WORLD()
-    self:Log():Write(self, "PLAYER_ENTERING_WORLD", "Loading from DB")
     local db = DraduxTodo:GetDB()
     self:FromData(db.characters)
-
-    self:Log():Write(self, "PLAYER_ENTERING_WORLD", "Trying to create, if not existent")
-    self:Log():Write(self, "PLAYER_ENTERING_WORLD", self.guid, "Keys")
 
     local character
     local name, realm = UnitFullName("player")
@@ -54,9 +58,7 @@ function CharacterManager:PLAYER_ENTERING_WORLD()
         self:AddAction(fullName, function()
             -- If called directly Scan() will be called and later OnEnable() which
             -- overwrites the scanned data
-            self:Log():Write(self, "PLAYER_ENTERING_WORLD", "Scanning")
             character:Scan()
-            self:Log():Write(self, "PLAYER_ENTERING_WORLD", character:AsData(), "Scanned")
             self:Add(character)
         end)
     else
@@ -64,18 +66,9 @@ function CharacterManager:PLAYER_ENTERING_WORLD()
         self:AddAction(fullName, function()
             -- If called directly Scan() will be called and later OnEnable() which
             -- overwrites the scanned data
-            self:Log():Write(self, "PLAYER_ENTERING_WORLD", "Scanning")
             character:Scan()
-            self:Log():Write(self, "PLAYER_ENTERING_WORLD", character:AsData(), "Scanned")
         end)
     end
-
-
-
-    C_Timer.After(5, function()
-        self:Log():Write(self, "PLAYER_ENTERING_WORLD", self.guid, "CharacterManager::GUID")
-        self:Log():Write(self, "PLAYER_ENTERING_WORLD", self:AsData(), "CharacterManager::Data")
-    end)
 end
 
 function CharacterManager:PLAYER_LOGOUT()
@@ -89,7 +82,6 @@ end
 
 function CharacterManager:RunActions(fullName)
     if self.actions[fullName] then
-        self:Log():Write(self, "RunActions", self.actions[fullName], "Running actions")
         for _, fn in ipairs(self.actions[fullName]) do
             fn()
         end
@@ -99,19 +91,47 @@ function CharacterManager:RunActions(fullName)
 end
 
 function CharacterManager:AddAction(fullName, fn)
-    self:Log():Write(self, "AddAction", fn, fullName)
-
     if not self.modulesCreated then
         if not self.actions[fullName] then
             self.actions[fullName] = {}
         end
 
         table.insert(self.actions[fullName], fn)
-        self:Log():Write(self, "AddAction", self.actions, "Actions")
     else
         self:RunActions(fullName)
         fn()
     end
+end
+
+function CharacterManager:GetCharacter(realm, name)
+    return self.modules[(realm or "") .. "_" .. (name or "")]
+end
+
+function CharacterManager:GetRealmList()
+    local List = DraduxTodo:GetModule("Util"):GetModule("List")
+    local realms = {}
+
+    for _, character in ipairs(self.characters) do
+        List:Append_Unique(realms, character:GetBase():GetRealm())
+    end
+
+    return realms
+end
+
+function CharacterManager:GetRealmBasedList()
+    local List = DraduxTodo:GetModule("Util"):GetModule("List")
+    local chars = {}
+
+    for _, character in ipairs(self.characters) do
+        local realm = character:GetBase():GetRealm()
+        if not chars[realm] then
+            chars[realm] = {}
+        end
+
+        List:Append_Unique(chars[realm], character:GetBase():GetCharacterName())
+    end
+
+    return chars
 end
 
 function CharacterManager:AsData()
@@ -127,20 +147,22 @@ end
 function CharacterManager:FromData(data)
     for _, entry in ipairs(data or {}) do
         local fullName = entry.base.realm .. "_" .. entry.base.name
-        local character = self:New(fullName)
+        local character = self.modules[fullName]
+        if not character then
+            character = self:New(fullName)
+        end
+
         self:AddAction(fullName, function()
-            self:Log():Write(self, "FromData", entry, "Loading")
-            character:FromData(entry) -- Timer again?!?
-            self:Log():Write(self, "FromData", character:AsData(), "Loaded")
+            character:FromData(entry)
             self:Add(character)
         end)
     end
 end
 
 function CharacterManager:OnModuleCreated(module)
-    self:Log():Write(self, "OnModuleCreated", module:GetName())
-
-    module:Initialize()
+    if module["Initialize"] then
+        module:Initialize()
+    end
 
     local name = module:GetName()
     self.modulesCreated[name] = true

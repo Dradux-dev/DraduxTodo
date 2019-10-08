@@ -1,10 +1,10 @@
 local StdUi = LibStub("StdUi")
 local DraduxTodo = _G["DraduxTodo"]
 
-SLASH_DRADUXTODO1 = "/dtodo"
+SLASH_DRADUXTODO1 = "/todo"
 
 function SlashCmdList.DRADUXTODO(cmd, editbox)
-    -- DraduxTodo:ToggleInterface()
+    DraduxTodo:ToggleInterface()
 end
 
 local defaultSavedVars = {}
@@ -28,7 +28,8 @@ end
 
 function DraduxTodo:ToggleInterface()
     if not self.window then
-        -- Create Frame
+        self.window = StdUi:DraduxTodo_MainFrame()
+        self.window:Hide()
     end
 
     ToggleFrame(self.window)
@@ -54,17 +55,6 @@ function DraduxTodo:GetContent()
     end
 
     return self.window.content
-end
-
-function DraduxTodo:GetSortedKeySet(t, func)
-    local keys = {}
-    for k, v in pairs(t) do
-        table.insert(keys, k)
-    end
-
-    table.sort(keys, func)
-
-    return keys
 end
 
 function DraduxTodo:SplitDate(date)

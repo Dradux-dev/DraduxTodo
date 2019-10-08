@@ -44,6 +44,58 @@ function Base:GetVariable(path)
     return self[name]
 end
 
+function Base:GetVariables()
+    return {
+        name = "base",
+        display = "Base",
+        type = "group",
+        value = {
+            {
+                name = "level",
+                display = "Level",
+                type = "number",
+                value = self.level,
+                readonly = true
+            },
+            {
+                name = "name",
+                display = "Name",
+                type = "string",
+                value = self.cname,
+                readonly = true
+            },
+            {
+                name = "realm",
+                display = "Realm",
+                type = "string",
+                value = self.realm,
+                readonly = true
+            },
+            {
+                name = "faction",
+                display = "Faction",
+                type = "string",
+                value = self.faction,
+                readonly = true
+            },
+            {
+                name = "class",
+                display = "Class",
+                type = "string",
+                value = self.class,
+                readonly = true
+            },
+            {
+                name = "guid",
+                display = "GUID",
+                type = "string",
+                value = self.guid,
+                readonly = true
+            }
+        }
+    }
+end
+
 function Base:Scan()
     self.level = UnitLevel("player")
     self.cname, self.realm = UnitFullName("player")
@@ -57,7 +109,6 @@ function Base:IsActivePlayer()
 end
 
 function Base:FromData(data)
-    self:Log():Write(self, "FromData", data, "Data")
     self.level = data.level
     self.cname = data.name
     self.realm = data.realm

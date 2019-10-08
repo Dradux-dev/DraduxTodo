@@ -30,7 +30,6 @@ local db = {
 ]]
 
 function Character:Initialize()
-    self:Log():Write(self, "OnEnable", "called")
     self.base = self:NewModule("Base", DraduxTodo:GetModule("Data"):GetModule("Base"), "AceEvent-3.0")
     self.neck = self:NewModule("Neck", DraduxTodo:GetModule("Data"):GetModule("Neck"), "AceEvent-3.0")
     self.user = self:NewModule("User", DraduxTodo:GetModule("Data"):GetModule("CustomManager"), "AceEvent-3.0")
@@ -40,6 +39,18 @@ function Character:GetVariable(path)
     local name = path[1]
     table.remove(path, 1)
     self.modules[name]:GetVariable(path)
+end
+
+function Character:GetVariables()
+    return {
+        name = "character",
+        type = "group",
+        value = {
+            self.base:GetVariables(),
+            self.neck:GetVariables(),
+            self.user:GetVariables()
+        }
+    }
 end
 
 function Character:GetBase()
@@ -74,14 +85,8 @@ function Character:AsData()
 end
 
 function Character:FromData(data)
-    self:Log():Write(self, "FromData", data, "Data")
-
     for k, v in pairs(data) do
-        self:Log():Write(self, "FromData", k, "K")
-        self:Log():Write(self, "FromData", self[k], "Module")
-        self:Log():Write(self, "FromData", (self[k] or {})["FromData"], "FromData Function")
         if self[k] and self[k]["FromData"] then
-            self:Log():Write(self, "FromData", k, "Loading module")
             self[k]:FromData(v)
         end
     end

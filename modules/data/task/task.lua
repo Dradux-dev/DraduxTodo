@@ -30,7 +30,6 @@ local db = {
 ]]
 
 function Task:Initialize()
-    self:Log():Write(self, "Initialize", "called")
     local DateTime = DraduxTodo:GetModule("Util"):GetModule("DateTime")
     local now = DateTime:Now()
 

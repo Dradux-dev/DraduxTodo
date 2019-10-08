@@ -211,6 +211,69 @@ function Essence:GetVariable(path)
     end
 end
 
+function Essence:GetVariables()
+    local t = {
+        name = self:GetName(),
+        display = self:GetName(),
+        type = "group",
+        value = {
+            {
+                name = "rank",
+                display = "Rank",
+                type = "number",
+                value = self.rank,
+                readonly = true
+            },
+            {
+                name = "discounted",
+                display = "Discounted",
+                type = "flag",
+                value = self.discounted,
+                readonly = true
+            },
+            {
+                name = "progress",
+                display = "Progress",
+                type = "group",
+                value = {}
+            }
+        }
+    }
+
+    for index, entry in ipairs(self.progress) do
+        table.insert(t.value[3].value, {
+            name = index,
+            display = "" .. index,
+            type = "group",
+            value = {
+                {
+                    name = "name",
+                    display = "Name",
+                    type = "string",
+                    value = entry.name,
+                    readonly = true
+                },
+                {
+                    name = "actual",
+                    display = "Actual",
+                    type = "number",
+                    value = entry.actual,
+                    readonly = true
+                },
+                {
+                    name = "max",
+                    display = "Max",
+                    type = "number",
+                    value = entry.max,
+                    readonly = true
+                }
+            }
+        })
+    end
+
+    return t
+end
+
 function Essence:Scan()
     for _, data in ipairs(C_AzeriteEssence.GetEssences()) do
         if self:IsCorrectData(data) then

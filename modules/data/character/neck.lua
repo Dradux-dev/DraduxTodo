@@ -34,8 +34,37 @@ function Neck:GetVariable(path)
     else
         return self[name]
     end
+end
 
+function Neck:GetVariables()
+    local t = {
+        name = "neck",
+        display = "Heart of Azeroth",
+        type = "group",
+        value = {
+            {
+                name = "level",
+                display = "Level",
+                type = "number",
+                value = self.level,
+                readonly = true
+            }
+        }
+    }
 
+    local Dictionary = DraduxTodo:GetModule("Util"):GetModule("Dictionary")
+    local essences = Dictionary:GetSortedKeySet(self.modules, function(a, b)
+        return a < b
+    end)
+
+    for index, essence in ipairs(essences) do
+        local module = self.modules[essence]
+        local vars = module:GetVariables()
+        vars.name =  essence
+        table.insert(t.value, vars)
+    end
+
+    return t
 end
 
 function Neck:Scan()

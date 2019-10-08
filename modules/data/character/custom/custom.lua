@@ -54,6 +54,14 @@ function Custom:GetVariable(path)
     end
 end
 
+function Custom:GetVariables()
+    return {
+        name = self.name,
+        type = self.type,
+        value = self.value
+    }
+end
+
 function Custom:FromData(data)
     self.name = data.name
     self.type = data.type

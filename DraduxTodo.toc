@@ -12,6 +12,15 @@ libs\load_libs.xml
 
 Core.lua
 Skin.lua
+GUI\RealmButton.lua
+GUI\CharacterButton.lua
+GUI\CustomGroup.lua
+GUI\CustomString.lua
+GUI\CustomNumber.lua
+GUI\CustomFlag.lua
+GUI\TaskList.lua
+GUI\CharacterList.lua
+GUI\Profile.lua
 GUI\MainFrame.lua
 GUI\DynamicContextMenu.lua
 DraduxTodo.lua
@@ -19,8 +28,11 @@ modules\util\util.lua
 modules\util\condition.lua
 modules\util\datetime.lua
 modules\util\dictionary.lua
+modules\util\function.lua
 modules\util\list.lua
 modules\util\log.lua
+modules\gui\gui.lua
+modules\gui\manager.lua
 modules\data\data.lua
 modules\data\character\character.lua
 modules\data\character\manager.lua

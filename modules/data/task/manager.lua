@@ -48,6 +48,23 @@ function TaskManager:GetCategories()
     return t
 end
 
+function TaskManager:GetModuleByCategory(category)
+    local List = DraduxTodo:GetModule("Util"):GetModule("List")
+    local categoryStr = List:Join(category)
+
+    local pos = List:FindFirst_If(Templates.orderedModules, function(element)
+        if element.category then
+            return categoryStr == List:Join(element.category)
+        end
+
+        return false
+    end)
+    for _, module in ipairs(Templates.orderedModules) do
+
+    end
+end
+
+
 function TaskManager:Log()
     return DraduxTodo:GetModule("Util"):GetModule("Log")
 end

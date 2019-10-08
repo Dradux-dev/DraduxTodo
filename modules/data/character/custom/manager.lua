@@ -12,6 +12,15 @@ function Manager:GetVariable(path)
     self.modules[name]:GetVariable(path)
 end
 
+function Manager:GetVariables()
+    return {
+        name = "user",
+        display = "User",
+        type = "group",
+        value = {}
+    }
+end
+
 function Manager:FromData(data)
     for _, element in ipairs(data) do
         self:AddCustom(data)
