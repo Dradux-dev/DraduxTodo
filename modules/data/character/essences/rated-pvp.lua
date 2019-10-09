@@ -8,7 +8,21 @@ function RatedPvp:Initialize()
     self.itemID = 169590
 end
 
+function RatedPvp:TriggerPvpFrame()
+    if PVEFrame then
+        -- Need to show player vs. player frame at least once, to load arena rankings
+        PVEFrame.selectedTab = 1;
+        PVEFrame.activeTabIndex = 1;
+        local fn = PVEFrame.tab2:GetScript("OnClick");
+        PVEFrame:Show()
+        fn(PVEFrame.tab2)
+        PVEFrame:Hide()
+    end
+end
+
 function RatedPvp:GetMaxRanking()
+    self:TriggerPvpFrame()
+    
     local max = 0
     for i=1, 4 do
         local ranking = GetPersonalRatedInfo(i)

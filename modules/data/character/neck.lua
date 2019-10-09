@@ -89,11 +89,11 @@ function Neck:Scan()
 end
 
 function Neck:FromData(data)
-    for k, v in ipairs(data) do
+    self.level = data.level
+
+    for k, v in pairs(data.essences) do
         if self.modules[k] then
             self.modules[k]:FromData(v)
-        else
-            self.level = data.level
         end
     end
 end

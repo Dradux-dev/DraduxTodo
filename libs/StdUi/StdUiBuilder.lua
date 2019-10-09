@@ -1,48 +1,58 @@
 --- @type StdUi
 local StdUi = LibStub and LibStub('StdUi', true);
 if not StdUi then
-	return;
+	return ;
 end
 
-local module, version = 'Builder', 3;
-if not StdUi:UpgradeNeeded(module, version) then return end;
+local module, version = 'Builder', 5;
+if not StdUi:UpgradeNeeded(module, version) then
+	return
+end ;
 
-function __genOrderedIndex(t)
-	local orderedIndex = {}
+local function __genOrderedIndex(t)
+	local orderedIndex = {};
+
 	for key in pairs(t) do
 		tinsert(orderedIndex, key)
 	end
-	table.sort(orderedIndex)
-	return orderedIndex
+
+	table.sort(orderedIndex, function(a, b)
+		if not t[a].order or not t[b].order then
+			return a < b;
+		end
+		return t[a].order < t[b].order;
+	end);
+
+	return orderedIndex;
 end
 
-function orderedNext(t, state)
+local function orderedNext(t, state)
 	local key;
 
 	if state == nil then
 		-- the first time, generate the index
-		t.__orderedIndex = __genOrderedIndex(t)
-		key = t.__orderedIndex[1]
+		t.__orderedIndex = __genOrderedIndex(t);
+		key = t.__orderedIndex[1];
 	else
 		-- fetch the next value
 		for i = 1, table.getn(t.__orderedIndex) do
 			if t.__orderedIndex[i] == state then
-				key = t.__orderedIndex[i + 1]
+				key = t.__orderedIndex[i + 1];
 			end
 		end
 	end
 
 	if key then
-		return key, t[key]
+		return key, t[key];
 	end
 
 	-- no more value to return, cleanup
-	t.__orderedIndex = nil
+	t.__orderedIndex = nil;
 	return
 end
 
-function orderedPairs(t)
-	return orderedNext, t, nil
+local function orderedPairs(t)
+	return orderedNext, t, nil;
 end
 
 local function setDatabaseValue(db, key, value)
@@ -53,10 +63,10 @@ local function setDatabaseValue(db, key, value)
 		for i, subKey in pairs(accessor) do
 			if i == #accessor then
 				startPos[subKey] = value;
-				return;
+				return
 			end
 
-			startPos = db[subKey];
+			startPos = startPos[subKey];
 		end
 	else
 		db[key] = value;
@@ -73,7 +83,7 @@ local function getDatabaseValue(db, key)
 				return startPos[subKey];
 			end
 
-			startPos = db[subKey];
+			startPos = startPos[subKey];
 		end
 	else
 		return db[key];
@@ -99,44 +109,39 @@ function StdUi:BuildElement(frame, row, info, dataKey, db)
 	local hasLabel = false;
 	if info.type == 'checkbox' then
 		element = self:Checkbox(frame, info.label);
-		element.dbReference = db;
-		element.dataKey = dataKey;
-
-		if db then
-			element:SetChecked(getDatabaseValue(db, dataKey));
-			element.OnValueChanged = genericChangeEvent;
-		end
 	elseif info.type == 'text' or info.type == 'editBox' then
 		element = self:EditBox(frame, nil, 20);
-		element.dbReference = db;
-		element.dataKey = dataKey;
+	elseif info.type == 'dropdown' then
+		element = self:Dropdown(frame, 300, 20, info.options or {}, nil, info.multi or nil, info.assoc or false);
+	elseif info.type == 'autocomplete' then
+		element = self:Autocomplete(frame, 300, 20, '');
 
-		if info.label then
-			self:AddLabel(frame, element, info.label);
-			hasLabel = true;
+		if info.validator then
+			element.validator = info.validator;
 		end
-
-		if db then
-			element:SetValue(getDatabaseValue(db, dataKey));
-			element.OnValueChanged = genericChangeEvent;
+		if info.transformer then
+			element.transformer = info.transformer;
+		end
+		if info.buttonCreate then
+			element.buttonCreate = info.buttonCreate;
+		end
+		if info.buttonUpdate then
+			element.buttonUpdate = info.buttonUpdate;
+		end
+		if info.items then
+			element:SetItems(info.items);
 		end
 	elseif info.type == 'sliderWithBox' then
 		element = self:SliderWithBox(frame, nil, 32, 0, info.min or 0, info.max or 2);
-		element.dbReference = db;
-		element.dataKey = dataKey;
-
-		if info.label then
-			self:AddLabel(frame, element, info.label);
-			hasLabel = true;
-		end
 
 		if info.precision then
 			element:SetPrecision(info.precision);
 		end
+	elseif info.type == 'button' then
+		element = self:Button(frame, nil, 20, info.text or '');
 
-		if db then
-			element:SetValue(getDatabaseValue(db, dataKey));
-			element.OnValueChanged = genericChangeEvent;
+		if info.onClick then
+			element:SetScript('OnClick', info.onClick);
 		end
 	elseif info.type == 'header' then
 		element = StdUi:Header(frame, info.label);
@@ -144,10 +149,48 @@ function StdUi:BuildElement(frame, row, info, dataKey, db)
 		element = info.createFunction(frame, row, info, dataKey, db);
 	end
 
-	row:AddElement(element, {column = info.column or 12, margin = {top = (hasLabel and 20 or 0)}});
-	--if hasLabel then
-	--	row.config.margin.top = 20;
-	--end
+	element.dbReference = db;
+	element.dataKey = dataKey;
+
+	if element.hasLabel then
+		hasLabel = true;
+	end
+
+	local canHaveLabel = info.type ~= 'checkbox' and info.type ~= 'header';
+	if info.label and canHaveLabel then
+		self:AddLabel(frame, element, info.label);
+		hasLabel = true;
+	end
+
+	if info.initialValue and element.SetValue then
+		element:SetValue(info.initialValue);
+	end
+
+	if info.initialValue and element.SetChecked then
+		element:SetChecked(info.initialValue);
+	end
+
+	-- Setting onValueChanged disqualifies from any writes to database
+	if info.onValueChanged then
+		element.OnValueChanged = info.onValueChanged;
+	elseif db then
+		if info.type == 'checkbox' then
+			element:SetChecked(getDatabaseValue(db, dataKey))
+		elseif element.SetValue then
+			element:SetValue(getDatabaseValue(db, dataKey));
+		end
+
+		element.OnValueChanged = genericChangeEvent;
+	end
+
+	row:AddElement(element, {
+		column = info.column or 12,
+		margin = info.layoutMargins or {
+			top = (hasLabel and 20 or 0)
+		}
+	});
+
+	return element;
 end
 
 ---BuildRow
@@ -160,7 +203,14 @@ function StdUi:BuildRow(frame, info, db)
 	for key, element in orderedPairs(info) do
 		local dataKey = element.key or key or nil;
 
-		self:BuildElement(frame, row, element, dataKey, db);
+		local el = self:BuildElement(frame, row, element, dataKey, db);
+		if element then
+			if not frame.elements then
+				frame.elements = {};
+			end
+
+			frame.elements[key] = el;
+		end
 	end
 end
 

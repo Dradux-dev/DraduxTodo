@@ -4,7 +4,7 @@ if not StdUi then
 	return;
 end
 
-local module, version = 'EditBox', 3;
+local module, version = 'EditBox', 5;
 if not StdUi:UpgradeNeeded(module, version) then return end;
 
 --- @return EditBox
@@ -38,24 +38,26 @@ function StdUi:SimpleEditBox(parent, width, height, text)
 	return editBox;
 end
 
-function StdUi:SearchEditBox(parent, width, height, placeholderText)
-	local editBox = self:SimpleEditBox(parent, width, height, '');
+function StdUi:ApplyPlaceholder(widget, placeholderText, icon, iconColor)
+	widget.placeholder = {};
 
-	local icon = self:Texture(editBox, 14, 14, [[Interface\Common\UI-Searchbox-Icon]]);
-	local c = self.config.font.color.disabled;
-	icon:SetVertexColor(c.r, c.g, c.b, c.a);
-	local label = self:Label(editBox, placeholderText);
+	local label = self:Label(widget, placeholderText);
 	self:SetTextColor(label, 'disabled');
+	widget.placeholder.label = label;
 
-	self:GlueLeft(icon, editBox, 5, 0, true);
-	self:GlueRight(label, icon, 2, 0);
+	if icon then
+		local texture = self:Texture(widget, 14, 14, icon);
+		local c = iconColor or self.config.font.color.disabled;
+		texture:SetVertexColor(c.r, c.g, c.b, c.a);
 
-	editBox.placeholder = {
-		icon = icon,
-		label = label
-	};
+		self:GlueLeft(texture, widget, 5, 0, true);
+		self:GlueRight(label, texture, 2, 0);
+		widget.placeholder.icon = texture;
+	else
+		self:GlueLeft(label, widget, 2, 0, true);
+	end
 
-	editBox:SetScript('OnTextChanged', function(self)
+	widget:HookScript('OnTextChanged', function(self)
 		if strlen(self:GetText()) > 0 then
 			self.placeholder.icon:Hide();
 			self.placeholder.label:Hide();
@@ -63,7 +65,15 @@ function StdUi:SearchEditBox(parent, width, height, placeholderText)
 			self.placeholder.icon:Show();
 			self.placeholder.label:Show();
 		end
+	end);
+end
 
+function StdUi:SearchEditBox(parent, width, height, placeholderText)
+	local editBox = self:SimpleEditBox(parent, width, height, '');
+
+	self:ApplyPlaceholder(editBox, placeholderText, [[Interface\Common\UI-Searchbox-Icon]]);
+
+	editBox:SetScript('OnTextChanged', function(self)
 		if self.OnValueChanged then
 			self:OnValueChanged(self:GetText());
 		end
@@ -77,6 +87,7 @@ function StdUi:EditBox(parent, width, height, text, validator)
 	validator = validator or StdUi.Util.editBoxValidator;
 
 	local editBox = self:SimpleEditBox(parent, width, height, text);
+	editBox.validator = validator;
 
 	function editBox:GetValue()
 		return self.value;
@@ -95,7 +106,7 @@ function StdUi:EditBox(parent, width, height, text, validator)
 
 	function editBox:Validate()
 		self.isValidated = true;
-		self.isValid = validator(self);
+		self.isValid = self.validator(self);
 
 		if self.isValid then
 			if self.button then
@@ -116,12 +127,12 @@ function StdUi:EditBox(parent, width, height, text, validator)
 	button.editBox = editBox;
 	editBox.button = button;
 
-	button:SetScript('OnClick', function(self)
-		self.editBox:Validate(self.editBox);
+	button:SetScript('OnClick', function(b)
+		b.editBox:Validate(b.editBox);
 	end);
 
-	editBox:SetScript('OnEnterPressed', function(self)
-		self:Validate();
+	editBox:SetScript('OnEnterPressed', function(e)
+		e:Validate();
 	end)
 
 	editBox:SetScript('OnTextChanged', function(self, isUserInput)

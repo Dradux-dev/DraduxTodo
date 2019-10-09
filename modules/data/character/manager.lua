@@ -166,5 +166,6 @@ function CharacterManager:OnModuleCreated(module)
 
     local name = module:GetName()
     self.modulesCreated[name] = true
+
     self:RunActions(name)
 end
