@@ -197,6 +197,10 @@ function Essence:GetNeckLevel()
     return C_AzeriteItem.GetPowerLevel(C_AzeriteItem.FindActiveAzeriteItem())
 end
 
+function Essence:GetZone()
+    return C_Map.GetBestMapForUnit("player")
+end
+
 function Essence:GetVariable(path)
     local name = path[1]
     table.remove(path, 1)
@@ -309,7 +313,7 @@ function Essence:FromData(data)
     self.discounted = data.discounted
 
     self.progress = {}
-    for _, entry in pairs(data.progress) do
+    for _, entry in pairs(data.progress or {}) do
         local t = {}
         for k, v in pairs(entry) do
             t[k] = v

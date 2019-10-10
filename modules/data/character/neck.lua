@@ -15,6 +15,9 @@ function Neck:Initialize()
     self.theUnboundForce = GetEssenceModule(self, "TheUnboundForce", "ReputationNazjatar"):TheUnboundForce()
     self.theEverRisingTide = GetEssenceModule(self, "TheEverRisingTide", "ReputationNazjatar"):TheEverRisingTide()
 
+    -- Bodyguard Nazjatar
+    self.memoryOfLucidDreams = GetEssenceModule(self, "MemoryOfLucidDreams", "BodyguardNazjatar")
+
     -- Mythic+
     self.animaOfLifeAndDeath = GetEssenceModule(self, "AnimaOfLifeAndDeath", "MythicPlus"):AnimaOfLifeAndDeath()
     self.essenceOfTheFocusingIris = GetEssenceModule(self, "EssenceOfTheFocusingIris", "MythicPlus"):EssenceOfTheFocusingIris()
@@ -118,5 +121,13 @@ end
 function Neck:OnModuleCreated(module)
     if module["Initialize"] then
         module:Initialize()
+    end
+end
+
+function Neck:QUEST_CHOICE_UPDATE()
+    for _, module in ipairs(self.orderedModules) do
+        if module["QUEST_CHOICE_UPDATE"] then
+            module:QUEST_CHOICE_UPDATE()
+        end
     end
 end

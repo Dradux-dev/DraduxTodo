@@ -20,7 +20,7 @@ end
 
 function NeckLevel:UpdateProgress()
     if self.rank == 0 then
-        self.progress = select(2, self:GetAchievemnt(self.achievementID))
+        self.progress = select(2, self:GetAchievement(self.achievementID))
     elseif self.rank == 1 then
         self.progress = self:BuildProgress(54)
     elseif self.rank == 2 then

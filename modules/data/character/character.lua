@@ -66,6 +66,7 @@ function Character:RegisterEvents()
         self:RegisterEvent("PLAYER_LEVEL_UP")
         self:RegisterEvent("AZERITE_ITEM_POWER_LEVEL_CHANGED")
         self:RegisterEvent("AZERITE_ESSENCE_CHANGED")
+        self:RegisterEvent("QUEST_CHOICE_UPDATE")
     end
 end
 
@@ -117,4 +118,8 @@ end
 function Character:AZERITE_ESSENCE_CHANGED()
     -- Learned new Essence for the Heart of Azeroth
     self.neck:Scan()
+end
+
+function Character:QUEST_CHOICE_UPDATE()
+    self.neck:QUEST_CHOICE_UPDATE()
 end
