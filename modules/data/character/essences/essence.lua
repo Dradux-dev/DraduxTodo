@@ -193,6 +193,10 @@ function Essence:GetAchievement(achievementID)
     return completed, objectives
 end
 
+function Essence:GetNeckLevel()
+    return C_AzeriteItem.GetPowerLevel(C_AzeriteItem.FindActiveAzeriteItem())
+end
+
 function Essence:GetVariable(path)
     local name = path[1]
     table.remove(path, 1)

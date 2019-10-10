@@ -22,7 +22,7 @@ end
 
 function RatedPvp:GetMaxRanking()
     self:TriggerPvpFrame()
-    
+
     local max = 0
     for i=1, 4 do
         local ranking = GetPersonalRatedInfo(i)

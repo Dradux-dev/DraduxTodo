@@ -7,6 +7,9 @@ end
 function Neck:Initialize()
     self.level = 1
 
+    -- Neck Level
+    self.theCrucibleOfFlame = GetEssenceModule(self, "TheCrucibleOfFlame", "NeckLevel")
+
     -- Reputation Nazjatar
     self.aegisOfTheDeep = GetEssenceModule(self, "AegisOfTheDeep", "ReputationNazjatar"):AegisOfTheDeep()
     self.theUnboundForce = GetEssenceModule(self, "TheUnboundForce", "ReputationNazjatar"):TheUnboundForce()
@@ -17,11 +20,12 @@ function Neck:Initialize()
     self.essenceOfTheFocusingIris = GetEssenceModule(self, "EssenceOfTheFocusingIris", "MythicPlus"):EssenceOfTheFocusingIris()
     self.lifeBindersInvocation = GetEssenceModule(self, "LifeBindersInvocation", "MythicPlus"):LifeBindersInvocation()
 
-    -- Pvp
+    -- PvP
     self.sphereOfSuppression = GetEssenceModule(self, "SphereOfSuppression", "Pvp"):SphereOfSuppression()
     self.bloodOfTheEnemy = GetEssenceModule(self, "BloodOfTheEnemy", "Pvp"):BloodOfTheEnemy()
     self.artificeOfTime = GetEssenceModule(self, "ArtificeOfTime", "Pvp"):ArtificeOfTime()
 
+    -- Rated PvP
     self.conflictAndStrife = GetEssenceModule(self, "ConflictAndStrife", "RatedPvp")
 end
 
