@@ -18,6 +18,11 @@ function Neck:Initialize()
     -- Bodyguard Nazjatar
     self.memoryOfLucidDreams = GetEssenceModule(self, "MemoryOfLucidDreams", "BodyguardNazjatar")
 
+    -- Reputation Mechagon
+    self.nullificationDynamo = GetEssenceModule(self, "NullificationDynamo", "ReputationMechagon"):NullificationDynamo()
+    self.theWellOfExistence = GetEssenceModule(self, "TheWellOfExistence", "ReputationMechagon"):TheWellOfExistence()
+    self.purificationProtocol = GetEssenceModule(self, "PurificationProtocol", "ReputationMechagon"):PurificationProtocol()
+
     -- Mythic+
     self.animaOfLifeAndDeath = GetEssenceModule(self, "AnimaOfLifeAndDeath", "MythicPlus"):AnimaOfLifeAndDeath()
     self.essenceOfTheFocusingIris = GetEssenceModule(self, "EssenceOfTheFocusingIris", "MythicPlus"):EssenceOfTheFocusingIris()

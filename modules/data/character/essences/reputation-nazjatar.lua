@@ -12,7 +12,7 @@ function ReputationNazjatar:Initialize()
     }
 
     self.alliance = {
-        reputationID = 2373,
+        reputationID = 2400,
         itemID = 169939
     }
 
