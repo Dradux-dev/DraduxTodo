@@ -23,6 +23,9 @@ function Neck:Initialize()
     self.theWellOfExistence = GetEssenceModule(self, "TheWellOfExistence", "ReputationMechagon"):TheWellOfExistence()
     self.purificationProtocol = GetEssenceModule(self, "PurificationProtocol", "ReputationMechagon"):PurificationProtocol()
 
+    -- Operation Mechagon
+    self.visionOfPerfection = GetEssenceModule(self, "VisionOfPerfection", "OperationMechagon")
+
     -- The Eternal Palace
     self.azerothsUndyingGift = GetEssenceModule(self, "AzerothsUndyingGift", "EternalPalace"):AzerothsUndyingGift()
     self.condensedLifeForce = GetEssenceModule(self, "CondensedLifeForce", "EternalPalace"):CondensedLifeForce()
