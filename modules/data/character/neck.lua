@@ -44,6 +44,9 @@ function Neck:Initialize()
     self.bloodOfTheEnemy = GetEssenceModule(self, "BloodOfTheEnemy", "Pvp"):BloodOfTheEnemy()
     self.artificeOfTime = GetEssenceModule(self, "ArtificeOfTime", "Pvp"):ArtificeOfTime()
 
+    -- PvP: Nazjatar / Mechagon
+    self.rippleInSpace = GetEssenceModule(self, "RippleInSpace", "PvpNazjatarMechagon")
+
     -- Rated PvP
     self.conflictAndStrife = GetEssenceModule(self, "ConflictAndStrife", "RatedPvp")
 end
