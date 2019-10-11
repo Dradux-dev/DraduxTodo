@@ -150,6 +150,8 @@ function BodyguardNazjatar:FromData(data)
 end
 
 function BodyguardNazjatar:QUEST_CHOICE_UPDATE()
+    -- This event is always triggered, whenever the bodyguard choosing frame
+    -- in nazjatar is displayed
     if self:GetZone() == self.zoneID then
         if WarboardQuestChoiceFrame and WarboardQuestChoiceFrame:IsShown() then
             self:ScanBodyguards()

@@ -33,6 +33,9 @@ function Neck:Initialize()
     self.essenceOfTheFocusingIris = GetEssenceModule(self, "EssenceOfTheFocusingIris", "MythicPlus"):EssenceOfTheFocusingIris()
     self.lifeBindersInvocation = GetEssenceModule(self, "LifeBindersInvocation", "MythicPlus"):LifeBindersInvocation()
 
+    -- Island Expedition
+    self.worldveinResonance = GetEssenceModule(self, "WorldveinResonance", "IslandExpedition")
+
     -- PvP
     self.sphereOfSuppression = GetEssenceModule(self, "SphereOfSuppression", "Pvp"):SphereOfSuppression()
     self.bloodOfTheEnemy = GetEssenceModule(self, "BloodOfTheEnemy", "Pvp"):BloodOfTheEnemy()
