@@ -23,6 +23,11 @@ function Neck:Initialize()
     self.theWellOfExistence = GetEssenceModule(self, "TheWellOfExistence", "ReputationMechagon"):TheWellOfExistence()
     self.purificationProtocol = GetEssenceModule(self, "PurificationProtocol", "ReputationMechagon"):PurificationProtocol()
 
+    -- The Eternal Palace
+    self.azerothsUndyingGift = GetEssenceModule(self, "AzerothsUndyingGift", "EternalPalace"):AzerothsUndyingGift()
+    self.condensedLifeForce = GetEssenceModule(self, "CondensedLifeForce", "EternalPalace"):CondensedLifeForce()
+    self.vitalityConduit = GetEssenceModule(self, "VitalityConduit", "EternalPalace"):VitalityConduit()
+
     -- Mythic+
     self.animaOfLifeAndDeath = GetEssenceModule(self, "AnimaOfLifeAndDeath", "MythicPlus"):AnimaOfLifeAndDeath()
     self.essenceOfTheFocusingIris = GetEssenceModule(self, "EssenceOfTheFocusingIris", "MythicPlus"):EssenceOfTheFocusingIris()
